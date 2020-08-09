@@ -1,0 +1,225 @@
+﻿@model QuanLyCafe.Models.DonDatHangmodel
+@{
+    ViewBag.Title = "GioHang";
+    int i = 0;
+    Layout = "~/Views/Shared/_LayoutNhanVien.cshtml";
+
+    
+}
+
+    <div class="container">
+
+        <div class="row mt-3"><a class="btn btn-primary text-light" href="/XuatHang/Index"><i class="fa fa-arrow-left" aria-hidden="true"> Trở về</i></a></div>
+        <h3 class="text-center mt-3 mb-3">Phiếu Xuất Hàng</h3>
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <b class="col-md-5">Tên Khách Hàng</b>
+                @Html.DropDownListFor(model=>model.MAKH, ViewBag.listKH as SelectList, "--Lựa chọn Khách hàng--", new { @class = "col-md-7"} )
+            </div>
+            <div class="col-md-7">
+                <b class="col-3">Địa Chỉ</b>
+                <input type="text" id="diaChi" class="col-md-9" disabled style=" border: none;background: transparent;font-style:italic" />
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-5">
+                <b class="col-md-5">Điện Thoại</b>
+                <input type="text" id="sdt" class="col-md-7" disabled style=" border: none;background: transparent;font-style:italic" />
+            </div>
+            <div class="col-md-7">
+                <b class="col-3">Email</b>
+                <input type="text" id="email" class="col-md-9" disabled style=" border: none;background: transparent;font-style:italic" />
+            </div>
+        </div>
+        <div class="row">        
+        <table class="table table-bordered">
+            <tr> 
+                <th>STT</th>
+                <th style="display:none">MASP</th>
+                <th>
+                    Hình Sản Phẩm
+                </th>
+                <th>
+                    Tên Sản Phẩm
+                </th>
+                <th>
+                    Số lượng
+                </th>
+                <th>
+                    ĐVT
+                </th>
+                <th style="width:1px">
+                    Giá
+                </th>
+                <th>
+                    Thành tiền
+                </th>
+                <th></th>
+            </tr>
+            @if (TempData["list"] != null)
+            {
+                foreach (var item in (IEnumerable<QuanLyCafe.Models.SanPhamModel>)TempData["list"])
+                {
+                    
+                    <tr>
+                        <td style="width:10px;">
+                            @{
+                                i++;
+                               
+                              }
+                            @i
+                        </td>
+                        <td style="display:none">@item.MASP</td>
+                        <td><img src="@item.HinhAnh" class="img-responsive" style="width:70px;height:70px" /></td>
+                        <td>@item.TENSP</td>
+                        <td>
+                            <input type="number" id="soLuong_@item.MASP" class="soluong" value="1" name="tentacles" min="1" max="@item.HANGTON" >
+                            <script> 
+                                var thanhtien = 0;
+                                var object = {};                               
+                                var id_@item.MASP = 'id_@item.MASP';
+                                $("#soLuong_@item.MASP").change(function () {
+                                    var thanhTien = 0;
+                                    var soLuong = $("#soLuong_@item.MASP").val();
+                                    var gia = $("#Gia_@item.MASP").val();
+                                    var thanhtien_@item.MASP = soLuong * gia;
+                                    $("#thanhTien_@item.MASP").val(thanhtien_@item.MASP);
+
+                                    if (id_@item.MASP in object) {
+                                        object.id_@item.MASP = thanhtien_@item.MASP;
+                                    } else {
+                                        object.id_@item.MASP = gia * soLuong;
+                                    }
+                                    for (const key in object) {
+                                        thanhTien = thanhTien + object[key];
+                                    }
+                                    $("#TongTien").text("Tổng tiền: " + thanhTien+" VNĐ");
+                                    if (thanhTien > 5000000) {
+                                        $("#GiamGia").text("Giảm giá (10%): " + thanhTien/10 + " VNĐ");
+                                        $("#TongThanhToan").text("Tổng thanh toán: " + (thanhTien - thanhTien/10) + " VNĐ");
+                                    } else {
+                                        $("#GiamGia").text("Giảm giá (10%): " + "0 VNĐ");
+                                        $("#TongThanhToan").text("Tổng thanh toán: " + thanhTien + " VNĐ");
+                                    }
+                                    thanhtien = thanhTien;
+                                })
+                                $("#soLuong_@item.MASP").ready(function () {
+                                    var thanhTien1 = 0;
+                                    object.id_@item.MASP = @item.GIA;                                                                       
+                                    for (const key in object) {
+                                        thanhTien1 = thanhTien1 + object[key];
+                                    }
+                                    $("#TongTien").text("Tổng tiền: " + thanhTien1 + " VNĐ");
+                                    if (thanhTien1 > 5000000) {
+                                        $("#GiamGia").text("Giảm giá (10%): "+ thanhTien1 * 10 % + " VNĐ");
+                                        $("#TongThanhToan").text("Tổng thanh toán: " + thanhTien1*90% + " VNĐ");
+                                    } else {
+                                        $("#GiamGia").text("Giảm giá: " + "0 VNĐ");
+                                        $("#TongThanhToan").text("Tổng thanh toán: " + thanhTien1+"VNĐ");
+                                    }
+                                    thanhtien = thanhTien1;
+                                })
+
+                            </script>
+                        </td>
+                        <td style="width:20px">
+                            @item.DonViTinh
+                        </td>
+                        <td style="width:50px">
+                            <input value=" @item.GIA" id="Gia_@item.MASP" readonly style="border:none;width:70px;" />                            
+                        </td>
+                        <td>
+                            <input value=" @item.GIA" name="thanhTien_@item.MASP" id="thanhTien_@item.MASP" readonly style="border:none;width:70px;" />                            
+                        </td>
+                        <td class="text-center"><i class="fa fa-times" aria-hidden="true" style="color:red" onclick="huySanPham(@item.MASP)"></i></td>
+                    </tr>
+
+                   
+                }
+            }
+
+        </table>
+        </div>
+        <div class="row">
+            <div align="right" class="col-md-12">
+                <h3 id="TongTien"></h3>
+                <h3 id="GiamGia" style="color:yellowgreen"></h3>
+                <h2 id="TongThanhToan" style="color:red"></h2>
+                <button onclick="ThanhToan()" class="btn btn-danger mb-3">Thanh Toán</button>
+            </div>
+        </div>
+        
+    </div>
+    <script>
+    $("#MAKH").change(function () {
+        var id = $("#MAKH").val();
+        console.log(id);
+        $.ajax({
+            type: "Get",
+            url: "/XuatHang/KhachHang",
+            data: { ID: id },
+            success: function (response) {
+                if (response != "") {
+                    $("#diaChi").val(response[0]);
+                    $("#sdt").val(response[1]);
+                    $("#email").val(response[2]);
+                } else {
+                    $("#diaChi").val("");
+                    $("#sdt").val("");
+                    $("#email").val("");
+                }
+            }
+        })
+    })
+
+    var huySanPham = function (id) {
+        
+        $.ajax({
+            type: "Post",
+            url: "/XuatHang/HuySanPham",
+            data: { ID: id },
+            success: function () {
+                window.location.href = "/XuatHang/ReLoadGioHang";
+            }
+        })
+        }
+        var ThanhToan = function () {
+            var maKH = $("#MAKH").val(); 
+            
+            if (maKH == "") {
+                alert("Hãy lựa chọn Khách hàng!")
+            } else {
+                var itemlist = [];
+
+                //get cell values, instead of the header text.
+                $("table tr:not(:first)").each(function () {
+                    var tdlist = $(this).find("td");
+                    var inputlist = $(this).find("input");
+                    var Item = {
+                        MASP: $(tdlist[1]).html(),
+                        soLuongBan: $(inputlist[0]).val(),
+                        GIA: $(inputlist[1]).val()
+                    };
+                    itemlist.push(Item);
+                })
+
+                $.ajax({
+                    type: "Post",
+                    url: "/XuatHang/ThanhToan?maKH=" + maKH + "&thanhtien=" + thanhtien,
+                    data: JSON.stringify({ itemlist: itemlist }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        alert("OK");
+                        window.location.href = "/XuatHang/Index";
+                    },
+                    
+
+             })
+            }
+
+            
+        }   
+
+    </script>
+

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<QuanLyCafe.Models.DonViTinhModel>
+@{ 
+    int i = 0;
+}
+<div style="overflow-y: scroll;height: 465px;">
+
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Đơn vị tính
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{ i++;}
+                    @i
+                </td>
+                <td>
+                    @item.TenDVT
+                </td>
+                <td><a class="btn btn-warning" onclick="SuaDVTEx(@item.MaDVT)"><i class="fa fa-pencil"></i></a></td>
+            </tr>
+
+        }
+
+    </table>
+
+</div>
+<script>
+    var SuaDVTEx = function (id) {
+
+        var url = "/Home/SuaDVTEx?ID=" + id;
+        $("#xemThongTin").load(url, function () {
+            $("#myModalXemThongTin").modal("show");
+        })
+    }
+</script>

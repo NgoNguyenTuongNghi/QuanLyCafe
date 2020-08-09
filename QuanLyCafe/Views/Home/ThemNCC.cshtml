@@ -1,0 +1,76 @@
+﻿@model QuanLyCafe.Models.NhaCungCapModel
+<div>
+    <h2 class="text-center">Thêm Nhà Cung Cấp</h2>
+    <form id="myFormNCC" class="form-group col-12">
+        
+        <div class="row mb-3">
+            <span class="col-5">Tên Nhà cung cấp</span>
+            @Html.TextBoxFor(model => model.TENNCC, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.TENNCC, "", new { @class = "text-danger", @style = "margin-left:180px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-5">Địa chỉ</span>
+            @Html.TextBoxFor(model => model.DIACHI, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.DIACHI, "", new { @class = "text-danger", @style = "margin-left:180px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-5">Điện thoại</span>
+            @Html.TextBoxFor(model => model.DIENTHOAI, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.DIENTHOAI, "", new { @class = "text-danger", @style = "margin-left:180px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-5">Email</span>
+            @Html.TextBoxFor(model => model.EMAIL, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.EMAIL, "", new { @class = "text-danger", @style = "margin-left:180px" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="imgNCC" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px;margin-left:130px" type="submit" onclick="CapNhatNCC()">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" onclick="HuyNCC()">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+<script>
+    var HuyNCC = function () {
+        $("#ThemTP").hide();
+    }
+    var CapNhatNCC = function () {
+        var data = $("#myFormNCC").serialize();
+        if (!$("#myFormNCC").valid()) {
+            return false;
+        } else {
+            $("#imgNCC").show();
+        }
+
+        var data = $("#myFormNCC").serialize();
+        if (!$("#myFormNCC").valid()) {
+            return false;
+        } else {
+            $("#imgNCC").show();
+        }
+
+        $.ajax({
+            type: "Post",
+            url: "/Home/PostThemNCC",
+            data: data,
+            success: function (response) {
+                if (response) {
+                    alert("Đã thêm thành công!");
+                    window.location.href = "/Home/Index2";
+                } else {
+                    alert("Nhà cung cấp đã tồn tại!");
+                }
+                HuyLH();
+            }
+        })
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

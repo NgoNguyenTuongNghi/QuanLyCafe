@@ -1,0 +1,52 @@
+﻿@model QuanLyCafe.Models.LoaiHangModel
+<div>
+    <h2 class="text-center">Thêm Loại Hàng</h2>
+    <form id="myFormLH" class="form-group col-12">        
+        <div class="row mb-3">
+            <span class="col-4">Tên loại hàng</span>
+            @Html.TextBoxFor(model => model.TENLH, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.TENLH, "", new { @class = "text-danger", @style = "margin-left:142px" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="imgLH" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px;margin-left:56px" type="submit" onclick="CapNhatLH()">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" onclick="HuyLH()">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+<script>
+    var HuyLH = function () {
+        $("#ThemTP").hide();
+    }
+    var CapNhatLH = function () {
+        var data = $("#myFormLH").serialize();
+        if (!$("#myFormLH").valid()) {
+            return false;
+        } else {
+            $("#imgLH").show();
+        }
+        $.ajax({
+            type: "Post",
+            url: "/Home/PostThemLH",
+            data: data,
+            success: function (response) {
+                if (response) {
+                    alert("Đã thêm thành công!");
+                    window.location.href = "/Home/Index2";
+                } else {
+                    alert("Loại hàng đã tồn tại!");
+                }
+                HuyLH();
+            }
+        })
+
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

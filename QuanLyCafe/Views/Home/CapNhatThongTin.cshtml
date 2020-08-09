@@ -1,0 +1,73 @@
+﻿@model QuanLyCafe.Models.NguoiDungModel
+
+<div>
+    <form id="myForm" class="form-group col-12">
+        @Html.HiddenFor(model => model.PASSWORD)
+        @Html.HiddenFor(model => model.MAQUYEN)
+        <div class="row mb-3">
+            <span class="col-4">Mã Nhân Viên</span>
+            @Html.TextBoxFor(model => model.MAND, new { @class = "col-8", @readonly = "readonly", @style = "background-color: gray; color: aliceblue;" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Tên Nhân Viên</span>
+
+            @Html.TextBoxFor(model => model.TENNV, new { @class = "col-8" })
+            @Html.ValidationMessageFor(model => model.TENNV, "", new { @class = "text-danger", @style = "margin-left:155px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Địa chỉ</span>
+            @Html.TextBoxFor(model => model.DIACHI, new { @class = "col-8" })
+            @Html.ValidationMessageFor(model => model.DIACHI, "", new { @class = "text-danger", @style = "margin-left:155px" })
+        </div>
+        <div class="row mb-3 ml">
+            <span class="col-4">Email</span>       
+            @Html.TextBoxFor(model => model.EMAIL, new { @class="col-8" })<br />
+            @Html.ValidationMessageFor(model => model.EMAIL, "", new { @class = "text-danger" , @style="margin-left:155px" })
+            
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Quyền hạn</span>
+            @Html.TextBoxFor(model => model.QUYEN, new { @class = "col-8", @readonly = "readonly", @style = "background-color: gray; color: aliceblue;" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="img" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px" type="submit" onclick="CapNhat(@Model.MAQUYEN)">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" data-dismiss="modal">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+
+
+
+<script>
+    
+    var CapNhat = function (quyen) {    
+        var data = $("#myForm").serialize();
+        if (!$("#myForm").valid()) {
+            return false;
+        } else {
+            $("#img").show();
+        }
+        $.ajax({
+            type: "POST",
+            url: "/Home/CapNhatThongTin",
+            data: data,
+            success: function () {
+                if(quyen ==1 )
+                    window.location.href = "/Home/Index";
+                else 
+                    window.location.href = "/XuatHang/Index";
+            }
+
+        })
+
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="bbf15e1337eb4635b3d80547098b4778" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="QLCAFEModel.CHITIETDATHANG" Width="1.5" PointX="5.25" PointY="4.125" />
+        <EntityTypeShape EntityType="QLCAFEModel.CHITIETNHAPHANG" Width="1.5" PointX="5.25" PointY="1.125" />
+        <EntityTypeShape EntityType="QLCAFEModel.DONDATHANG" Width="1.5" PointX="3" PointY="9.875" />
+        <EntityTypeShape EntityType="QLCAFEModel.DONNHAPHANG" Width="1.5" PointX="3" PointY="0.75" />
+        <EntityTypeShape EntityType="QLCAFEModel.DONVITINH" Width="1.5" PointX="0.75" PointY="6.875" />
+        <EntityTypeShape EntityType="QLCAFEModel.KHACHHANG" Width="1.5" PointX="0.75" PointY="10.125" />
+        <EntityTypeShape EntityType="QLCAFEModel.LOAIHANG" Width="1.5" PointX="0.75" PointY="4.375" />
+        <EntityTypeShape EntityType="QLCAFEModel.NGUOIDUNG" Width="1.5" PointX="8" PointY="7.5" />
+        <EntityTypeShape EntityType="QLCAFEModel.NHACUNGCAP" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="QLCAFEModel.QUYEN" Width="1.5" PointX="5.75" PointY="7.875" />
+        <EntityTypeShape EntityType="QLCAFEModel.SANPHAM" Width="1.5" PointX="3" PointY="3.375" />
+        <EntityTypeShape EntityType="QLCAFEModel.sysdiagram" Width="1.5" PointX="7.75" PointY="2.375" />
+        <AssociationConnector Association="QLCAFEModel.PK_CHITIETDATHANG_DONDATHANG" />
+        <AssociationConnector Association="QLCAFEModel.PK_CHITIETDATHANG_SANPHAM" />
+        <AssociationConnector Association="QLCAFEModel.PK_CHITIETNHAPHANG_DONNHAPHANG" />
+        <AssociationConnector Association="QLCAFEModel.PK_CHITIETNHAPHANG_SANPHAM" />
+        <AssociationConnector Association="QLCAFEModel.PK_DONDATHANG_KHACHHANG" />
+        <AssociationConnector Association="QLCAFEModel.FK_SANPHAM_DONVITINH" />
+        <AssociationConnector Association="QLCAFEModel.PK_SANPHAM_LOAIHANG" />
+        <AssociationConnector Association="QLCAFEModel.PK_NGUOIDUNG_QUYEN" />
+        <AssociationConnector Association="QLCAFEModel.PK_SANPHAM_NHACUNGCAP" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,62 @@
+﻿@model QuanLyCafe.Models.ChiTietNhapHangModel
+<div>
+    <h3 class="text-center mb-1">Thêm Đơn Nhập Hàng</h3>
+    <form id="myForm" class="form-group col-12">
+        @Html.HiddenFor(model => model.MASP)
+        <div class="row mb-3">
+            <span class="col-4">Tên Sản Phẩm</span>
+            @Html.TextBoxFor(model => model.TenSP, new { @class = "col-7", @readonly = "readonly", @style = "background-color: gray; color: aliceblue;" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Tên Nhà cung cấp</span>
+            @Html.TextBoxFor(model => model.NCC, new { @class = "col-7", @readonly = "readonly", @style = "background-color: gray; color: aliceblue;" })
+
+        </div>
+        @Html.HiddenFor(model => model.tinhTrang)
+        <div class="row mb-3">
+            <span class="col-4">Số lượng</span>
+            <input type="number" id="SOLUONG" name="SOLUONG" min="1000" value="1000" class="col-md-7" pattern="[1-9]{1}[0-9]{2}[0-9]++" title="Nhập số lượng lớn hơn 1000!">
+            @Html.ValidationMessageFor(model => model.SOLUONG, "", new { @class = "text-danger", @style = "margin-left:155px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Giá</span>
+            <input type="number" id="GIA" name="GIA" min="1000" value="1000" class="col-md-7" pattern="[1-9]{1}[0-9]{2}[0-9]+" title="Nhập giá lớn hơn 1000VNĐ!">
+            @Html.ValidationMessageFor(model => model.GIA, "", new { @class = "text-danger", @style = "margin-left:155px" })
+        </div>
+
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="img" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px;margin-left:56px" type="submit" onclick="XacNhan()">
+            <span>Xác nhận</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" data-dismiss="modal">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+<script>
+    var XacNhan = function () {
+        var data = $("#myForm").serialize();
+        console.log(data);
+        if (!$("#myForm").valid()) {            
+            return false;
+        } else {
+            $("#img").show();
+        }
+
+        $.ajax({
+            type: "Post",
+            url: "/NhapHang/XacNhan",
+            data: data,
+            success: function () {
+                alert("Đơn Nhập hàng được gửi đi!");
+                window.location.href = "/NhapHang/Index";
+            }
+        })
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

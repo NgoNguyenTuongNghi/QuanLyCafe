@@ -1,0 +1,169 @@
+﻿@model PagedList.IPagedList<QuanLyCafe.Models.SanPhamModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Content/css/HomeIndex.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row  mb-3 mt-3">
+        <div class="col-md-7" id="timkiem">
+            <form class="flex-nowrap col ml-auto footer-subscribe p-0" >
+                <input type="text" class="form-control" placeholder="Tìm Kiếm …" id="formTimKiem" value="@Session["TimKiem"]">
+                <button type="button" class="btn btn-theme bg-orange" onclick="TimKiem()">
+                    <i class="fa fa-search p-0"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-md-3" id="select">
+
+            <select id="mySelect" class="fa" value="2" style="height:30px">
+                <option value="0" id="moinhat" selected>Mới nhất</option>
+                <option value="1" class="fa " id="az">&#xf15d; Tên Sản Phẩm</option>
+                <option value="2" class="fa" id="za">&#xf15e; Tên Sản phẩm</option>
+                <option value="3" class="fa" id="tang">&#xf160; Giá tăng dần</option>
+                <option value="4" class="fa" id="giam">&#xf161; Giá giảm dần</option>
+            </select>
+            <button onclick="selectItem()" class="btn  btn-primary">Lọc</button>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-primary" onclick="addEditSanPham(0)" id="BtnThem">
+                <i class="fa fa-plus">  Thêm Sản Phẩm</i>
+
+            </button>
+        </div>
+        
+    </div>
+    <div class="row" id="danhSachSanPham">
+        @if (Model != null)
+        {
+            foreach (var i in Model)
+            {
+                <div class="col-md-4">
+
+                    <div class="row p-2 border rounded" style="background-color:burlywood">
+                        <div class="col-md-3 mt-1">
+                            <img class="img-fluid img-responsive rounded product-image" src="@i.HinhAnh">
+                        </div>
+
+                        <div class="align-items-center align-content-center col-md-8 border-left mt-1">
+                            <h5 style="height:48px"><i class="fa fa-product-hunt" aria-hidden="true"></i> @i.TENSP</h5>
+                            <h5><i class="fa fa-building" aria-hidden="true"></i> @i.NhaCungCap</h5>
+                            <h5>Số lượng: @i.HANGTON @i.DonViTinh</h5>
+                            <div class="d-flex flex-row align-items-center">
+                                <h4 class="mr-1">Giá: @i.GIA VNĐ</h4>
+                            </div>
+
+                        </div>
+                        <div style="margin-left:90px">
+                            <button class="btn btn-primary btn-sm" type="button" style="width:85px" onclick="addEditSanPham(@i.MASP)">Cập Nhật</button>
+                            <button class="btn btn-danger btn-sm ml-1" type="button" style="width:85px" onclick="XoaSanPham(@i.MASP)">Xóa</button>
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+       
+    </div>
+    <div class="row justify-content-center" id="phanTrang">
+        <div class="col-md-12 text-center mt-1">
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+        </div>
+        
+        <div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </div>       
+    </div>
+    <div class="modal fade" id="myModalDelete">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Xoá Sản Phẩm</h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+
+                </div>
+                <div class="modal-body">
+                    <h3>Bạn có chắc chắn muốn xóa hay không?</h3>
+                    <div>
+                        <img src="~/Content/images/loading.gif" id="img1" style="display:none; width:100px ; height:auto" class="text-center" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-primary" data-dismiss="modal">Hủy</a>
+                    <input type="button" class="btn btn-danger" value="Đồng ý" id="btnDongY" />
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" id="myModalXemThongTin">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="tieuDeModal"></h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="xemThongTin">
+                    @* Load thong tin them sua vao day *@
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var addEditSanPham = function (id) {
+        if (id == 0) {
+            var url = "/Home/Index2"
+            window.location.href = url;           
+        } else {
+            var url = "/Home/AddEditSanPham?ID=" + id;
+            $("#xemThongTin").load(url, function () {
+                $("#myModalXemThongTin").modal("show");
+            })
+        }
+
+    }
+    var Id = 0
+    var XoaSanPham = function (id) {
+        Id = id;
+        $("#myModalDelete").modal("show");
+
+    }
+    $("#btnDongY").click(function () {
+        $("#img1").show();
+        $.ajax({
+            type: "POST",
+            url: "/Home/XoaSanPham",
+            data: { ID: Id },
+            success: function (result) {
+                $("#img1").hide();
+                $("#myModalDelete").modal("hide");
+                window.location.href = "/Home/Index";
+            }
+        })
+    })
+
+    var selectItem = function () {
+        var select = $("#mySelect").val();
+        var timKiem = $("#formTimKiem").val() == null ? "" : $("#formTimKiem").val();
+        window.location.href = "/Home/Index1?select=" + select + "&timKiem=" + timKiem;
+
+    }
+    $(document).ready(function () {
+        $("#mySelect").val('@Session["Select"]').change();
+        
+        
+    })
+
+    var TimKiem = function () {
+        var timKiem = $("#formTimKiem").val();
+        var select = ($("#mySelect").val() == null) ? 0 : $("#mySelect").val();
+
+        window.location.href = "/Home/Index1?select=" + select + "&timKiem=" + timKiem;
+    }
+</script>

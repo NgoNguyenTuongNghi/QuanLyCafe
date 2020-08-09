@@ -1,0 +1,119 @@
+﻿@model QuanLyCafe.Models.DonDatHangmodel
+@{
+    ViewBag.Title = "XemChiTiet";
+    int i = 0;
+    Layout = "~/Views/Shared/_LayoutNhanVien.cshtml";
+}
+
+    <div class="container">
+        <div class="mt-4" id="back">
+            <div style="float:left">
+            <a class="btn btn-primary text-light" href="/KiemTraDonHang/Index">
+                <i class="fa fa-arrow-left" aria-hidden="true"> Trở về</i>
+            </a></div>
+            @if(Model.TRANGTHAI)
+            {
+               <div align="right">
+                    <button onclick="printout()"><i class="fa fa-print" aria-hidden="true"></i></button>
+               </div>
+            }
+        </div>
+        <h3 class="text-center mt-3 mb-1">CHI TIẾT PHIẾU XUẤT HÀNG</h3>
+        <h4 class="text-center mt-3 mb-2">Lập ngày @Model.NGAYMUA.Day/@Model.NGAYMUA.Month/@Model.NGAYMUA.Year</h4>
+        @if (Model.TRANGTHAI)
+        {
+            <h4 class="text-center mt-1 mb-5">Giao ngày @Model.NGAYGIAO.Day/@Model.NGAYGIAO.Month/@Model.NGAYGIAO.Year</h4>
+        }
+      
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <b class="col-md-5">Tên Khách Hàng</b>
+                @Html.DisplayFor(model => model.tenKH, new { @class = "col-md-7" })
+            </div>
+            <div class="col-md-8">
+                <b class="col-2">Địa Chỉ</b>
+                @Html.DisplayFor(model => model.DIACHI, new { @class = "col-md-10" })
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <b class="col-md-5">Điện Thoại</b>
+                @Html.DisplayFor(model => model.DIENTHOAI, new { @class = "col-md-7" })
+            </div>
+            <div class="col-md-8">
+                <b class="col-3">Email</b>
+                @Html.DisplayFor(model => model.EMAIL, new { @class = "col-md-7" })
+            </div>
+        </div>
+        <div class="row">
+            <table class="table table-bordered">
+                <tr>
+                    <th>STT</th>
+                    <th>
+                        Tên Sản Phẩm
+                    </th>
+                    <th>
+                        Số lượng
+                    </th>
+                    <th>
+                        ĐVT
+                    </th>
+                    <th>
+                        Giá
+                    </th>
+                </tr>
+                @if (TempData["list"] != null)
+                {
+                    foreach (var item in (IEnumerable<QuanLyCafe.Models.ChiTietXuatHangModel>)TempData["list"])
+                    {
+
+                        <tr>
+                            <td style="width:10px;">
+                                @{i++; }
+                                @i
+                            </td>
+                            <td>@item.TENSP</td>
+                            <td>
+                                @item.SOLUONG
+                            </td>
+                            <td style="width:20px">
+                                @item.DonViTinh
+                            </td>
+                            <td>
+                                @item.GIA
+                            </td>
+                        </tr>
+
+
+                    }
+                }
+
+            </table>
+        </div>
+        <div class="row">
+            <div align="right" class="col-md-12">
+                <h3>Thành tiền: @Model.TONGTIEN VNĐ</h3>
+                @if (Model.TONGTIEN > 5000000)
+                {
+                    <h3 style="color:yellowgreen">Giảm giá: @Model.TONGTIEN/10 VNĐ</h3>
+                    <h2 style="color:red">Tổng thanh toán: @Model.TONGTIEN*9/10 VNĐ</h2>
+                }
+                else
+                {
+                    <h3 style="color:yellowgreen">Giảm giá: 0 VNĐ</h3>
+                    <h2 style="color:red">Tổng thanh toán: @Model.TONGTIEN VNĐ</h2>
+                }
+
+            </div>
+        </div>
+
+    </div>
+<script>
+    var printout = function () {
+        $("#back").hide();
+        window.print();
+        $("#back").show();
+    }
+</script>
+
+

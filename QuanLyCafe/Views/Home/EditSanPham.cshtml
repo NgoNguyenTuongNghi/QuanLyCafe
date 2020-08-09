@@ -1,0 +1,147 @@
+﻿@model QuanLyCafe.Models.SanPhamModel
+
+<div>
+    <form id="myFormSua" class="form-group">
+        @Html.HiddenFor(model => model.MASP)
+        <div class="row mb-3">
+            <span class="col-3">Tên sản phẩm</span>
+            @Html.TextBoxFor(model => model.TENSP, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.TENSP, "", new { @class = "text-danger", @style = "margin-left:150px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-3">Hình sản phẩm</span>
+            <div class="col-7" style="padding:0px">
+                <div id="hienThiInput1" style="width:240px; display:none">
+                    <input type="file" id="inputImg1" required />
+
+                </div>
+                <div class="card" id="hienThiHinhAnh1">
+                    <img class="card-img-top img-responsive text-center" id="hinhAnh1" src="@Model.HinhAnh" style="width: 89px;margin-left: 100px;height: 80px;">
+                    <div class="card-body p-0">
+                        <a onclick="ClearSua()" class="btn"><i class="fa fa-trash"></i></a>
+                        <span id="noiDung1"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row mb-3">
+            <span class="col-3">Loại hàng</span>
+
+            @Html.DropDownListFor(model => model.MALH, ViewBag.listLH as SelectList, "--Lựa chọn loại hàng--", new { @class = "col-5" })
+            <a class="btn btn-primary ml-1 col-1" onclick="ThemLH()"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-warning ml-1 col-1"><i class="fa fa-pencil"></i></a>
+            @Html.ValidationMessageFor(model => model.MALH, "", new { @class = "text-danger", @style = "margin-left:150px" })
+
+        </div>
+        <div class="row mb-3">
+            <span class="col-3">Nhà cung cấp</span>
+
+            @Html.DropDownListFor(model => model.MANCC, ViewBag.listNCC as SelectList, "--Lựa chọn Nhà cung cấp--", new { @class = "col-5" })
+            <a class="btn btn-primary ml-1 col-1" onclick="ThemNCC()"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-warning ml-1 col-1"><i class="fa fa-pencil"></i></a>
+            @Html.ValidationMessageFor(model => model.MANCC, "", new { @class = "text-danger", @style = "margin-left:150px" })
+        </div>
+        <div class="row mb-3" id="DVT">
+            <span class="col-3">Đơn vị tính</span>
+
+            @Html.DropDownListFor(model => model.MaDVT, ViewBag.listDVT as SelectList, "--Lựa chọn Đơn vị tính--", new { @class = "col-5" })
+            <a class="btn btn-primary ml-1 col-1" onclick="ThemDVT()"><i class="fa fa-plus"></i></a>
+            <a class="btn btn-warning ml-1 col-1"><i class="fa fa-pencil"></i></a>
+            @Html.ValidationMessageFor(model => model.MaDVT, "", new { @class = "text-danger", @style = "margin-left:150px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-3">Giá</span>
+            @Html.TextBoxFor(model => model.GIA, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.GIA, "", new { @class = "text-danger", @style = "margin-left:150px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-3">Hàng tồn kho</span>
+            @Html.TextBoxFor(model => model.HANGTON, new { @class = "col-7", @readonly = "readonly", @style = "background-color: gray; color: aliceblue;" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="imgSua" />
+    </div>
+    <div class="text-center">
+
+        <button href="#" class="btn btn-primary" style="width:100px" type="submit" onclick="CapNhatSua()">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" data-dismiss="modal">
+            <span>Hủy</span>
+        </button>
+
+
+    </div>
+</div>
+<script>
+    var ClearSua = function () {
+        $("#hienThiInput1").show();
+        $("#inputImg1").val('');
+        $("#noiDung1").text('');
+        $("#hienThiHinhAnh1").hide();
+
+    }
+    $("#inputImg1").change(function () {
+        var File = this.files;
+        if (File && File[0])
+            ReadFile1(File[0]);
+    });
+
+    var ReadFile1 = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + 'KB';
+
+                $("#hinhAnh1").attr('src', _file.target.result);
+                $("#noiDung1").text("Size:" + height + " x " + width + ", " + size + ", " + type + "");
+                $("#hienThiHinhAnh1").show();
+                $("#hienThiInput1").hide();
+            }
+        }
+    }
+    var CapNhatSua = function () {
+        if (!$("#myFormSua").valid()) {
+            return false;
+        } else {
+            $("#imgSua").show();
+        }
+        var file = $("#inputImg1").get(0).files;
+
+        var data = new FormData();
+        data.append("MASP", $("#MASP").val());
+        data.append("TENSP", $("#TENSP").val());
+        data.append("HANGTON", $("#HANGTON").val());
+        data.append("HinhAnh", "@Model.HinhAnh");
+        data.append("GIA", $("#GIA").val());
+        data.append("MALH", $("#MALH").val());
+        data.append("MANCC", $("#MANCC").val());
+        data.append("MaDVT", $("#MaDVT").val());
+        data.append("ImageFile", file[0]);
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/AddEditSanPham",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (response) {              
+                alert("Đã cập nhật thành công!")
+                window.location.href = "/Home/Index";
+                
+            }
+        })
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

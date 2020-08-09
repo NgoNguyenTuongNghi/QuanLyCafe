@@ -1,0 +1,46 @@
+﻿@model QuanLyCafe.Models.DonViTinhModel
+<div>
+    <h3 class="text-center mb-1">Cập Nhật Đơn Vị Tính</h3>
+    <form id="myFormDVTEx" class="form-group col-12">
+        @Html.HiddenFor(model => model.MaDVT)
+        <div class="row mb-3">
+            <span class="col-4">Tên loại hàng</span>
+            @Html.TextBoxFor(model => model.TenDVT, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.TenDVT, "", new { @class = "text-danger", @style = "margin-left:155px" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="imgLHEx" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px;margin-left:56px" type="submit" onclick="CapNhatDVTEx()">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" data-dismiss="modal">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+<script>
+    var CapNhatDVTEx = function () {
+        var data = $("#myFormDVTEx").serialize();
+        if (!$("#myFormDVTEx").valid()) {
+            return false;
+        } else {
+            $("#img").show();
+        }
+        $.ajax({
+            type: "Post",
+            url: "/Home/CapNhatDVTEx",
+            data: data,
+            success: function () {
+                $("#myModalXemThongTin").modal("hide");
+                $("#ThemTP").hide();
+                window.location.href = "/Home/Index2";
+            }
+        })
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

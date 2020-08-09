@@ -1,0 +1,41 @@
+﻿@model IEnumerable<QuanLyCafe.Models.LoaiHangModel>
+
+@{ int i = 0;}
+    <div style="overflow-y: scroll;height: 465px;">
+        <table class="table table-bordered">
+            <tr>
+                <th>
+                    STT
+                </th>
+                <th>
+                    Tên Loại Hàng
+                </th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{ i++;}
+                        @i
+                    </td>
+                    <td>
+                        @item.TENLH
+                    </td>
+                    <td><a class="btn btn-warning" onclick="SuaLHEx('@item.MALH')"><i class="fa fa-pencil"></i></a></td>
+                </tr>
+
+            }
+
+        </table>
+        
+    </div>
+<script>
+    var SuaLHEx = function (id) {
+       
+        var url = "/Home/SuaLHEx?ID=" + id;
+        $("#xemThongTin").load(url, function () {
+            $("#myModalXemThongTin").modal("show");
+        })
+    }
+</script>

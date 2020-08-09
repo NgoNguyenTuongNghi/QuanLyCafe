@@ -1,0 +1,121 @@
+﻿@model PagedList.IPagedList<QuanLyCafe.Models.DonDatHangmodel>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutNhanVien.cshtml";
+    int i = 0;
+}
+
+<div class="container">
+    
+    <h3 class="text-center mt-4">DANH SÁCH ĐƠN HÀNG</h3>
+    <h4 class="text-center mt-1" id="thoiGian"></h4>
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Khách Hàng
+            </th>
+            <th>
+                Ngày mua
+            </th>
+            <th>
+                Ngày giao
+            </th>
+            <th>
+                Tổng tiền
+            </th>            
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+        
+        
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{ i++;}
+                    @i
+                </td>
+                
+                <td>@item.tenKH</td>
+                <td>@item.NGAYMUA.Hour:@item.NGAYMUA.Minute:@item.NGAYMUA.Second  @item.NGAYMUA.Day/@item.NGAYMUA.Month/@item.NGAYMUA.Year</td>
+                
+                @if(item.TRANGTHAI == false)
+                {
+                    <td></td>
+                }
+                else
+                {
+                    <td>@item.NGAYGIAO.Hour:@item.NGAYGIAO.Minute:@item.NGAYGIAO.Second  @item.NGAYGIAO.Day/@item.NGAYGIAO.Month/@item.NGAYGIAO.Year</td>
+                }
+
+                <td>@item.TONGTIEN</td>
+                
+
+                @if (item.TRANGTHAI)
+                {
+                    <td><span style="background-color:darkgoldenrod">Thành công</span></td>
+                }
+                else
+                {
+                    <td><span class="bg-primary" onclick="tinhTrangThayDoi(@item.SOHOADONDAT)">Đang giao</span></td>
+                }
+                <td><a href="#" onclick="XemChiTiet(@item.SOHOADONDAT)">Xem chi tiết</a></td>
+                @if (item.TRANGTHAI == false)
+                {
+                    <td><button onclick="HuyDon(@item.SOHOADONDAT)" class="btn-danger">Hủy</button></td>
+                }
+                else
+                {
+                    <td></td>
+                }
+            </tr>
+        }
+        
+
+    </table>
+    <div class="row justify-content-center" id="phanTrang">
+        <div class="col-md-12 text-center mt-1">
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+        </div>
+
+        <div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </div>
+    </div>
+
+</div>
+<script>
+    var tinhTrangThayDoi = function (soHoaDonDat) {
+        $.ajax({
+            type: "Post",
+            url: "/KiemTraDonHang/tinhTrangThayDoi",
+            data: { soHoaDonDat: soHoaDonDat },
+            success: function () {
+                window.location.href = "/KiemTraDonHang/Index";
+            }
+        })
+    }
+    var HuyDon = function (soHoaDonDat) {
+        $.ajax({
+            type: "Post",
+            url: "/KiemTraDonHang/HuyDon",
+            data: { soHoaDonDat: soHoaDonDat },
+            success: function () {
+                window.location.href = "/KiemTraDonHang/Index";
+            }
+        })
+    }
+    var XemChiTiet = function (soHoaDonDat) {
+        window.location.href = "/KiemTraDonHang/XemChiTiet?soHoaDonDat=" + soHoaDonDat;
+    }
+
+
+</script>
+

@@ -1,0 +1,69 @@
+﻿@model QuanLyCafe.Models.NguoiDungModel
+<div>
+    <form id="myForm" class="form-group col-12">
+        @Html.HiddenFor(model => model.TENNV)
+        @Html.HiddenFor(model => model.MAQUYEN)
+        @Html.HiddenFor(model => model.MAND)
+        @Html.HiddenFor(model => model.DIACHI)
+        @Html.HiddenFor(model => model.EMAIL)
+        <div class="row mb-3">
+            <span class="col-5">Mật khẩu cũ</span>
+            @Html.TextBoxFor(model => model.PASSWỎDOLD, new { @class = "col-7", @type = "password" })
+            @Html.ValidationMessageFor(model => model.PASSWỎDOLD, "", new { @class = "text-danger", @style = "margin-left:193px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-5">Mật khẩu mới</span>
+            @Html.TextBoxFor(model => model.PASSWORD, new { @class = "col-7", @type = "password" })
+            @Html.ValidationMessageFor(model => model.PASSWORD, "", new { @class = "text-danger", @style = "margin-left:193px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-5">Nhập lại mật khẩu</span>
+
+            @Html.TextBoxFor(model => model.REPASSWORD, new { @class = "col-7", @type = "password" })
+            @Html.ValidationMessageFor(model => model.REPASSWORD, "", new { @class = "text-danger", @style = "margin-left:193px" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="img" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px" type="submit" onclick="CapNhat()">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" data-dismiss="modal">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+<script>
+
+    var CapNhat = function () {
+        var data = $("#myForm").serialize();
+        if (!$("#myForm").valid()) {
+            return false;
+        } else {
+            $("#img").show();
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/CapNhatMatKhau",
+            data: data,
+            success: function (response) {
+                if (response == true) {
+                    alert("Bạn hãy Đăng nhập lại!")
+                    window.location.href = "/Login/Index";
+                } else {
+                    alert("Mật khẩu hoặc Mật khẩu nhập lại không đúng!")
+                    $("#img").hide();
+                }
+                
+            }
+
+        })
+
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

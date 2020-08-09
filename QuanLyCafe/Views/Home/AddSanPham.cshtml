@@ -1,0 +1,230 @@
+﻿@model QuanLyCafe.Models.SanPhamModel
+    <div style="display: table;border: black;border-style: solid;padding: 17px;margin-bottom: 20px;" id="hienthiSP">
+        <h2 class="text-center" style="color:red" id="TieuDeModal">Thêm Thông Tin Sản Phẩm</h2>
+        <form id="myForm" class="form-group">
+           
+            <div class="row mb-3">
+                <span class="col-3">Tên sản phẩm</span>
+                @Html.TextBoxFor(model => model.TENSP, new { @class = "col-7" })
+                @Html.ValidationMessageFor(model => model.TENSP, "", new { @class = "text-danger", @style = "margin-left:150px" })
+            </div>
+            <div class="row mb-3">
+                <span class="col-3">Hình sản phẩm</span>
+                <div class="col-7" style="padding:0px">
+                    <div id="hienThiInput" style="width:240px">
+                        <input type="file" id="inputImg" accept="image/*" title="Bạn cần chọn hình ảnh!" />
+                        @Html.ValidationMessageFor(model => model.ImageFile, "", new { @class = "text-danger", @style = "margin-left:142px" })
+                    </div>
+                    <div class="card" style="display:none" id="hienThiHinhAnh">                       
+                        <img class="card-img-top img-responsive text-center" id="hinhAnh"  style="width: 89px;margin-left: 120px;height: 80px;">                       
+                        <div class="card-body p-0">
+                            <a onclick="Clear()" class="btn"><i class="fa fa-trash"></i></a>
+                            <span id="noiDung"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mb-3">
+                <span class="col-3">Loại hàng</span>
+
+                @Html.DropDownListFor(model => model.MALH, ViewBag.listLH as SelectList, "--Lựa chọn loại hàng--", new { @class = "col-5" })
+                <a class="btn btn-primary ml-1 col-1" onclick="ThemLH()"><i class="fa fa-plus"></i></a>
+                <a class="btn btn-warning ml-1 col-1" onclick="SuaLH()"><i class="fa fa-pencil"></i></a>
+                @Html.ValidationMessageFor(model => model.MALH, "", new { @class = "text-danger", @style = "margin-left:150px" })
+
+            </div>
+            <div class="row mb-3">
+                <span class="col-3">Nhà cung cấp</span>
+
+                @Html.DropDownListFor(model => model.MANCC, ViewBag.listNCC as SelectList, "--Lựa chọn Nhà cung cấp--", new { @class = "col-5" })
+                <a class="btn btn-primary ml-1 col-1" onclick="ThemNCC()"><i class="fa fa-plus"></i></a>
+                <a class="btn btn-warning ml-1 col-1" onclick="SuaNCC()"><i class="fa fa-pencil"></i></a>
+                @Html.ValidationMessageFor(model => model.MANCC, "", new { @class = "text-danger", @style = "margin-left:150px" })
+            </div>
+            <div class="row mb-3" id="DVT">
+                <span class="col-3">Đơn vị tính</span>
+
+                @Html.DropDownListFor(model => model.MaDVT, ViewBag.listDVT as SelectList, "--Lựa chọn Đơn vị tính--", new { @class = "col-5" })
+                <a class="btn btn-primary ml-1 col-1" onclick="ThemDVT()"><i class="fa fa-plus"></i></a>
+                <a class="btn btn-warning ml-1 col-1" onclick="SuaDVT()"><i class="fa fa-pencil"></i></a>
+                @Html.ValidationMessageFor(model => model.MaDVT, "", new { @class = "text-danger", @style = "margin-left:150px" })
+            </div>
+            <div class="row mb-3">
+                <span class="col-3">Giá</span>
+                @Html.TextBoxFor(model => model.GIA,"1000", new { @class = "col-7"})
+                @Html.ValidationMessageFor(model => model.GIA, "", new { @class = "text-danger", @style = "margin-left:150px" })
+            </div>
+            <div class="row mb-3">
+                <span class="col-3">Hàng tồn kho</span>
+                @Html.TextBoxFor(model => model.HANGTON, new { @class = "col-7", @readonly = "readonly", @style = "background-color: gray; color: aliceblue;" })
+            </div>
+        </form>
+        <div class="text-center">
+            <img src="~/Content/images/loading.gif" style="display:none" id="img" />
+        </div>
+        <div class="text-center">
+            
+            <button href="#" class="btn btn-primary" style="width:100px" type="submit" onclick="CapNhat()">
+                <span>Thêm</span>
+            </button>
+            <button href="#" class="btn btn-danger" style="width:100px"  onclick="Huy()">
+                <span>Hủy</span>
+            </button>
+            
+           
+        </div>
+        </div>
+<script>
+
+    var CapNhat = function () {
+        
+        if (!$("#myForm").valid()) {
+            return false;
+        } else {
+            $("#img").show();
+        }
+        var file = $("#inputImg").get(0).files;
+
+        var data = new FormData();
+        data.append("TENSP", $("#TENSP").val());
+        data.append("HANGTON", $("#HANGTON").val());
+        data.append("HinhAnh", "HinhAnh");
+        data.append("GIA", $("#GIA").val());
+        data.append("MALH", $("#MALH").val());
+        data.append("MANCC", $("#MANCC").val());
+        data.append("MaDVT", $("#MaDVT").val());
+        data.append("ImageFile", file[0]);
+
+        $.ajax({
+            type: "POST",
+            url: "/Home/AddEditSanPham",
+            data: data,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                if (response) {
+                    alert("Đã thêm thành công!")
+                    window.location.href = "/Home/Index";
+                } else {
+                    alert("Sản phẩm đã tồn tại!");
+                }
+                    
+            }
+        })
+    }
+    var Huy = function () {
+        window.location.href = "/Home/Index";
+    }
+
+    var ThemLH = function () { 
+        
+        var url = "/Home/ThemLH";
+        $("#ThemTP").load(url, function () {
+            $("#ThemTP").show();
+        })      
+    }
+    var SuaLH = function () {
+        if(flag1 == false){
+            var url = "/Home/SuaLH";
+            $("#ThemTP").load(url, function () {
+                $("#ThemTP").show();
+                flag1 = true;
+                flag2 = false;
+                flag3 = false;
+            })
+        }else {
+            $("#ThemTP").hide();
+            flag1 = false;
+            flag2 = false;
+            flag2 = false;
+        }
+    }
+    var ThemNCC = function () {        
+        var url = "/Home/ThemNCC";
+        $("#ThemTP").load(url, function () {
+            $("#ThemTP").show();
+        })
+    }
+    var ThemDVT = function () {      
+        var url = "/Home/ThemDVT";
+        $("#ThemTP").load(url, function () {
+            $("#ThemTP").show();
+        })
+    }
+    var flag1 = false;
+    var flag2 = false;
+    var flag3 = false;
+    var SuaDVT = function () {
+        if (flag2 == false) {
+            var url = "/Home/SuaDVT";
+            $("#ThemTP").load(url, function () {
+                $("#ThemTP").show();
+                flag2 = true;
+                flag3 = false;
+                flag1 = false;
+            })
+        } else {
+            $("#ThemTP").hide();
+            flag2 = false;
+            flag1 = false;
+            flag3 = false;
+        }     
+    }
+    var SuaNCC = function () {
+        if (flag3 == false) {
+            var url = "/Home/SuaNCC";
+            $("#ThemTP").load(url, function () {
+                $("#ThemTP").show();
+                flag3 = true;
+                flag2 = false;
+                flag1 = false;
+            })
+        } else {
+            $("#ThemTP").hide();
+            flag3 = false;
+            flag2 = false;
+            flag1 = false;
+        }
+    }
+    $("#inputImg").change(function () {
+        var File = this.files;
+        if (File && File[0])
+            ReadFile(File[0]);
+    });
+    
+    var ReadFile = function (file) {
+        var reader = new FileReader;
+        var image = new Image;
+
+        reader.readAsDataURL(file);
+        reader.onload = function (_file) {
+            image.src = _file.target.result;
+
+            image.onload = function () {
+                var height = this.height;
+                var width = this.width;
+                var type = file.type;
+                var size = ~~(file.size / 1024) + 'KB';
+
+                $("#hinhAnh").attr('src', _file.target.result);
+                $("#noiDung").text("Size:" + height + " x " + width + ", " + size + ", " + type + "");
+                $("#hienThiHinhAnh").show();
+                $("#hienThiInput").hide();
+            }
+        }
+    }
+    var Clear = function () {
+        $("#hienThiInput").show();
+        $("#inputImg").val('');
+        $("#noiDung").text('');
+        $("#hienThiHinhAnh").hide();
+        $("#inputImg").change();
+    }
+
+           
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+

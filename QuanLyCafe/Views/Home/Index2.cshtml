@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Index2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="container m-2" id="AddEditSanPham" style="display:none">
+        <div class="row justify-content-center">
+            <div id="SanPham" class=" col-md-7"></div>
+            <div id="ThemTP" class="col-md-5" style="display:none">
+                
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        var url = "/Home/AddEditSanPham?ID=" + 0;
+        $("#SanPham").load(url, function () {
+            $("#AddEditSanPham").show();
+           
+        })
+    })
+</script>

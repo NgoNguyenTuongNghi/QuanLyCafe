@@ -1,0 +1,44 @@
+﻿@model IEnumerable<QuanLyCafe.Models.NhaCungCapModel>
+@{
+    int i = 0;
+}
+<div style="overflow-y: scroll;height: 465px;">
+
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Tên Nhà cung cấp
+            </th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{ i++;}
+                    @i
+                </td>
+                <td>
+                    @item.TENNCC
+                </td>
+                <td><a class="btn btn-warning" onclick="SuaNCCEx('@item.MANCC')"><i class="fa fa-pencil"></i></a></td>
+            </tr>
+
+        }
+
+    </table>
+
+</div>
+<script>
+    var SuaNCCEx = function (id) {
+       
+        var url = "/Home/SuaNCCEx?ID=" + id;
+        $("#xemThongTin").load(url, function () {
+            $("#myModalXemThongTin").modal("show");
+        })
+    }
+</script>
+

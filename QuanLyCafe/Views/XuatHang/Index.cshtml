@@ -1,0 +1,121 @@
+﻿@model PagedList.IPagedList<QuanLyCafe.Models.SanPhamModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutNhanVien.cshtml";
+}
+
+<link href="~/Content/css/HomeIndex.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row  mb-3 mt-3">
+        <div class="col-md-7" id="timkiem">
+            <form class="flex-nowrap col ml-auto footer-subscribe p-0">
+                <input type="text" class="form-control" placeholder="Tìm Kiếm …" id="formTimKiem" value="@Session["TimKiem"]">
+                <button type="button" class="btn btn-theme bg-orange" onclick="TimKiem()">
+                    <i class="fa fa-search p-0"></i>
+                </button>
+            </form>
+        </div>
+        <div class="col-md-3" id="select">
+
+            <select id="mySelect" class="fa" value="2" style="height:30px">
+                <option value="0" class="fa " id="az" selected disabled hidden>--Chọn Bộ lọc--</option>
+                <option value="1" class="fa " id="az" selected>&#xf15d; Tên Sản Phẩm</option>
+                <option value="2" class="fa" id="za">&#xf15e; Tên Sản phẩm</option>
+                <option value="3" class="fa" id="tang">&#xf160; Giá tăng dần</option>
+                <option value="4" class="fa" id="giam">&#xf161; Giá giảm dần</option>
+            </select>
+            <button onclick="selectItem()" class="btn  btn-primary">Lọc</button>
+        </div>
+        <div class="col-md-2" style="padding-top: 5px;">
+            <button style="font-size: 17px; width: 50px;background-color: transparent;border: none; margin-left:160px" onclick="GioHang()">
+                <i class="fa fa-cart-plus" aria-hidden="true" style="color:red;font-size: 35px"></i>
+            </button>
+        </div>
+
+    </div>
+    <div class="row" id="danhSachSanPham">
+        @if (Model != null)
+        {
+            foreach (var i in Model)
+            {
+                <div class="col-md-4">
+
+                    <div class="row p-2 border rounded" style="background-color:burlywood">
+                        <div class="col-md-3 mt-1">
+                            <img class="img-fluid img-responsive rounded product-image" src="@i.HinhAnh">
+                        </div>
+
+                        <div class="align-items-center align-content-center col-md-8 border-left mt-1">
+                            <h5 style="height:48px"><i class="fa fa-product-hunt" aria-hidden="true"></i> @i.TENSP</h5>
+                            <h5><i class="fa fa-building" aria-hidden="true"></i> @i.NhaCungCap</h5>
+                            <h5>Số lượng: @i.HANGTON @i.DonViTinh</h5>
+                            <div class="d-flex flex-row align-items-center">
+                                <h4 class="mr-1">Giá: @i.GIA VNĐ</h4>
+                            </div>
+                        </div>
+                        <div style="margin-left:128px">
+                            <button class="btn btn-primary btn-sm" type="button" style="width:120px" onclick="addSanPham(@i.MASP)"><i class="fa fa-cart-plus" aria-hidden="true"></i> Thêm Hàng</button>                        
+                        </div>
+                    </div>
+
+                </div>
+            }
+        }
+    </div>
+    <div class="row justify-content-center" id="phanTrang">
+        <div class="col-md-12 text-center mt-1">
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+        </div>
+
+        <div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </div>
+    </div>
+    
+</div>
+<script>
+     $(document).ready(function () {
+        $("#mySelect").val('@Session["Select"]').change();
+         
+    })
+
+    var TimKiem = function () {
+        var timKiem = $("#formTimKiem").val();
+        var select =  $("#mySelect").val();
+        if (select > 0) {
+            window.location.href = "/XuatHang/Index1?select=" + select + "&timKiem=" + timKiem;
+        }
+        else {
+            window.location.href = "/XuatHang/Index1?select=0" + "&timKiem=" + timKiem;
+        }
+    }
+    var selectItem = function () {
+        var select =  $("#mySelect").val();
+        var timKiem = $("#formTimKiem").val() == null ? "" : $("#formTimKiem").val();
+        
+        if (select > 0) {
+            window.location.href = "/XuatHang/Index1?select=" + select + "&timKiem=" + timKiem;
+        }
+        else {
+            window.location.href = "/XuatHang/Index1?select=0" + "&timKiem=" + timKiem;
+        }
+    }
+
+    var s = "@Session["IDs"]";
+    var addSanPham = function (id) {
+        if (s.includes(id)) {
+            alert("Sản phẩm đã tồn tại trong giỏ hàng!");
+        } else {
+            s = s + id + "-";
+            console.log(s);
+            alert("Bạn đã thêm sản phẩm vào giỏ hàng!");
+        }
+
+    }
+    var GioHang = function () {
+        window.location.href = "/XuatHang/GioHang?IDs=" + ""+s;
+    }
+</script>
+

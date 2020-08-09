@@ -1,0 +1,87 @@
+﻿@model PagedList.IPagedList<QuanLyCafe.Models.SanPhamModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "ThemMoiDonNhap";
+    int i = 0;
+}
+
+    <div class="container">
+
+        <div class="row mt-3"><a class="btn btn-primary text-light" href="/NhapHang/Index"><i class="fa fa-arrow-left" aria-hidden="true"> Trở về</i></a></div>
+        <h3 class="text-center mt-3">DANH SÁCH SẢN PHẨM CẦN NHẬP</h3>
+        <table class="table table-bordered">
+            <tr>
+                <th>
+                    STT
+                </th>
+                <th>
+                    Hình Sản Phẩm
+                </th>
+                <th>
+                    Tên Sản Phẩm
+                </th>
+                <th>
+                    Nhà cung cấp
+                </th>
+                <th>
+                    Tồn kho
+                </th>
+                <th>
+                    Đơn vị tính
+                </th>
+                <th>Giá</th>
+                <th></th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{ i++;}
+                        @i
+                    </td>
+                    <td><img src="@item.HinhAnh" class="img-responsive" style="width:70px;height:70px" /></td>
+                    <td>@item.TENSP</td>
+                    <td>@item.NhaCungCap</td>
+                    <td>@item.HANGTON</td>
+                    <td>@item.DonViTinh</td>
+                    <td>@item.GIA</td>
+                    <td><button class="btn-danger" onclick="Nhap(@item.MASP)">Nhập</button></td>
+                </tr>
+            }
+
+
+        </table>
+        <div class="row justify-content-center" id="phanTrang">
+            <div class="col-md-12 text-center mt-1">
+                Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+            </div>
+
+            <div>
+                @Html.PagedListPager(Model, page => Url.Action("ThemMoiDonNhap", new { page }))
+            </div>
+        </div>
+
+        <div class="modal fade" id="myModalXemThongTin">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="tieuDeModal"></h3>
+                        <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    </div>
+                    <div class="modal-body" id="xemThongTin">
+                        @* Load thong tin them sua vao day *@
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+<script>
+    var Nhap = function (id) {
+        var url = "/NhapHang/Nhap?ID=" + id;
+        $("#xemThongTin").load(url, function () {
+            $("#myModalXemThongTin").modal("show");
+        })
+    }
+</script>
+

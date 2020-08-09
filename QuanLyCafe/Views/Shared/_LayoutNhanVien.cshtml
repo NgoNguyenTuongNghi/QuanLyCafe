@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T&T Coffee Managerment</title>
+
+    <link rel="icon" type="image/png" href="../../Content/images/icons/LogoCafe.ico" />
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+    <link href="~/Content/css/layout.css" rel="stylesheet" />
+    <script src="~/Content/js/layout.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-image: url('../../Content/images/background.jpg');background-size:cover;">
+        <img src="~/Content/images/logo.jpg" style="width:50px;margin-right:25px" />
+        <a class="navbar-brand" href="/XuatHang/Index" style="color:white">T&T Coffee</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item  ">
+                    <a class="nav-link text-light active" href="/XuatHang/Index">Trang chủ @*<span class="sr-only">(current)</span>*@</a>
+                </li>
+                
+                <li class="nav-item ">
+                    <a class="nav-link text-light" href="/KiemTraDonHang/Index">Kiểm tra đơn hàng</a>
+                </li>
+            </ul>
+           
+            <div class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:aqua">
+                    Xin chào, @Session["TenNV"]
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item btn" href="#" onclick="CapNhatThongTin('@Session["MaND"]',1)">Cập nhật Trang cá nhân</a>
+                    <a class="dropdown-item btn" href="#" onclick="CapNhatThongTin('@Session["MaND"]',2)">Thay đổi Mật khẩu</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item btn" href="/Login/Logout">Đăng xuất</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="modal fade" id="myModalXemThongTin">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="titleModal"></h3>
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                </div>
+                <div class="modal-body" id="xemThongTin">
+                    @* Load thong tin ca nhan vao day *@
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    @RenderBody()
+
+
+
+    <footer class="text-center footer">
+        <p>&copy; @DateTime.Now.Year - T&T Coffee</p>
+    </footer>
+
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+﻿@model QuanLyCafe.Models.NhaCungCapModel
+<div>
+    <h3 class="text-center mb-1">Cập Nhật Nhà Cung Cấp</h3>
+    <form id="myFormNCCEx" class="form-group col-12">
+        <div class="row mb-3">
+            @Html.HiddenFor(model=>model.MANCC)
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Tên Nhà cung cấp</span>
+            @Html.TextBoxFor(model => model.TENNCC, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.TENNCC, "", new { @class = "text-danger", @style = "margin-left:153px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Địa chỉ</span>
+            @Html.TextBoxFor(model => model.DIACHI, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.DIACHI, "", new { @class = "text-danger", @style = "margin-left:153px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Điện thoại</span>
+            @Html.TextBoxFor(model => model.DIENTHOAI, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.DIENTHOAI, "", new { @class = "text-danger", @style = "margin-left:153px" })
+        </div>
+        <div class="row mb-3">
+            <span class="col-4">Email</span>
+            @Html.TextBoxFor(model => model.EMAIL, new { @class = "col-7" })
+            @Html.ValidationMessageFor(model => model.EMAIL, "", new { @class = "text-danger", @style = "margin-left:153px" })
+        </div>
+    </form>
+    <div class="text-center">
+        <img src="~/Content/images/loading.gif" style="display:none" id="imgLHEx" />
+    </div>
+    <div class="text-center">
+        <button href="#" class="btn btn-primary" style="width:100px;margin-left:56px" type="submit" onclick="CapNhatNCCEx()">
+            <span>Cập nhật</span>
+        </button>
+        <button href="#" class="btn btn-danger" style="width:100px" data-dismiss="modal">
+            <span>Hủy</span>
+        </button>
+    </div>
+</div>
+<script>
+
+    var CapNhatNCCEx = function () {
+        
+        if (!$("#myFormNCCEx").valid()) {
+            return false;
+        } else {
+            $("#img").show();
+        }
+        var data = $("#myFormNCCEx").serialize();
+        $.ajax({
+            type: "Post",
+            url: "/Home/CapNhatNCCEx",
+            data: data,
+            success: function () {
+                $("#myModalXemThongTin").modal("hide");
+                $("#ThemTP").hide();
+                window.location.href = "/Home/Index2";
+            }
+        })
+    }
+</script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

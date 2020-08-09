@@ -1,0 +1,100 @@
+﻿@model PagedList.IPagedList<QuanLyCafe.Models.ChiTietNhapHangModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 0;
+}
+
+<div class="container">
+    <div align="right">
+        
+        <button class="btn btn-primary col-md-2 mt-3" onclick="ThemMoiDonNhap()">Nhập hàng</button>
+    </div>
+    
+    <h3 class="text-center mt-3">DANH SÁCH ĐƠN NHẬP HÀNG</h3>    
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                STT
+            </th>
+            <th>
+                Hình Sản Phẩm
+            </th>
+            <th>
+                Tên Sản Phẩm
+            </th>
+            <th>
+                Nhà cung cấp
+            </th>
+            <th>
+                Số lượng
+            </th>
+            <th>
+                Giá
+            </th>
+            <th>
+                Ngày nhập
+            </th>
+            <th>
+                Tình trạng
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @{ i++;}
+                    @i
+                </td>
+                <td><img src="@item.hinhAnh" class="img-responsive" style="width:70px;height:70px" /></td>
+                <td>@item.TenSP</td>
+                <td>@item.NCC</td>
+                <td>@item.SOLUONG</td>
+                <td>@item.GIA</td>
+                <td>@item.ngayNhap.Hour:@item.ngayNhap.Minute:@item.ngayNhap.Second  @item.ngayNhap.Day/@item.ngayNhap.Month/@item.ngayNhap.Year</td>
+
+                @if (item.tinhTrang)
+                {
+                    <td><span style="background-color:darkgoldenrod">Thành công</span></td>
+                }
+                else
+                {
+                    <td><span class="bg-primary" onclick="tinhTrangThayDoi(@item.SOHOADONNHAP,@item.MASP)">Đang giao</span></td>
+                }
+
+            </tr>
+        }
+
+
+    </table>
+    <div class="row justify-content-center" id="phanTrang">
+        <div class="col-md-12 text-center mt-1">
+            Trang @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+        </div>
+
+        <div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+        </div>
+    </div>
+
+</div>
+<script>
+    var tinhTrangThayDoi = function (soHoaDon, maSP) {
+        $.ajax({
+            type: "Post",
+            url: "/NhapHang/tinhTrangThayDoi",
+            data: { soHoaDon: soHoaDon, maSP: maSP },
+            success: function () {
+                window.location.href = "/NhapHang/Index";
+            }
+        })
+    }
+    var ThemMoiDonNhap = function () {
+        window.location.href = "/NhapHang/ThemMoiDonNhap"
+    }
+
+    
+    
+</script>
+
